@@ -61,6 +61,9 @@ export const STYLE = /* css */ `
 .tp-title h1 {
   margin: 0.12em 0 0; padding: 0.04em 0 0.14em; font-size: clamp(52px, 6.2vw, 112px); line-height: 0.95; font-weight: 750;
   letter-spacing: -0.035em; white-space: nowrap;
+  /* Korean title is wider than the panel: the gradient is clipped to the element box,
+     so size the box to the text or the overflowing glyphs render transparent. */
+  width: max-content; max-width: 100%;
   background: linear-gradient(176deg, #fffaf0 0%, #ffe9c6 46%, #ffc58f 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   filter: drop-shadow(0 4px 22px rgba(10, 8, 30, 0.45));
@@ -178,6 +181,7 @@ export const STYLE = /* css */ `
   .tp-root[data-screen="title"] .tp-title { animation: none; }
   .tp-root:not([data-screen="title"]) .tp-title { transform: translateX(-50%) translateY(12px); }
   .tp-eyebrow { justify-content: center; }
+  .tp-title h1 { font-size: clamp(40px, 11vw, 72px); }
   .tp-sub { margin-left: auto; margin-right: auto; }
   .tp-legend { margin-left: auto; margin-right: auto; grid-template-columns: repeat(2, auto); }
   .tp-scrim { background: linear-gradient(0deg, rgba(6,8,22,0.7), rgba(6,8,22,0) 65%); }
