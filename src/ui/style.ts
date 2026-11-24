@@ -10,7 +10,8 @@ export const STYLE = /* css */ `
   --warm: #ffcf8a;
   --warm-2: #ff9f6e;
   --font: "Segoe UI Variable Display", "Segoe UI Variable Text", "SF Pro Rounded", ui-rounded, "SF Pro Display",
-    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue",
+    "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   position: fixed; inset: 0; pointer-events: none; color: var(--ink); font-family: var(--font);
   -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none;
   font-size: 15px; line-height: 1.4; letter-spacing: 0.005em;
