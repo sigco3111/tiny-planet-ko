@@ -16,19 +16,22 @@ const key = (k: string, wide = false) => `<kbd class="tp-k${wide ? ' tp-kw' : ''
 
 const LEGEND = `
   <div class="tp-legend">
-    <div class="tp-row"><span class="tp-keys">${key('W')}${key('A')}${key('S')}${key('D')}</span><span>Move</span></div>
-    <div class="tp-row"><span class="tp-keys"><span class="tp-ico">${ICON.mouse}</span></span><span>Look</span></div>
-    <div class="tp-row"><span class="tp-keys">${key('Shift', true)}</span><span>Run</span></div>
-    <div class="tp-row"><span class="tp-keys">${key('Space', true)}</span><span>Jump</span></div>
-    <div class="tp-row"><span class="tp-keys">${key('F')}</span><span>Fly</span></div>
-    <div class="tp-row"><span class="tp-keys">${key('Esc', true)}</span><span>Pause</span></div>
+    <div class="tp-row"><span class="tp-keys">${key('W')}${key('A')}${key('S')}${key('D')}</span><span>이동</span></div>
+    <div class="tp-row"><span class="tp-keys"><span class="tp-ico">${ICON.mouse}</span></span><span>시점</span></div>
+    <div class="tp-row"><span class="tp-keys">${key('Shift', true)}</span><span>달리기</span></div>
+    <div class="tp-row"><span class="tp-keys">${key('Space', true)}</span><span>점프</span></div>
+    <div class="tp-row"><span class="tp-keys">${key('F')}</span><span>비행</span></div>
+    <div class="tp-row"><span class="tp-keys">${key('Esc', true)}</span><span>일시정지</span></div>
   </div>`;
 
-const WALK_HINT = `${key('W')}${key('A')}${key('S')}${key('D')} move <i></i> ${key('Shift', true)} run <i></i> ${key('Space', true)} jump <i></i> ${key('F')} fly <i></i> ${key('M')} sound`;
-const FLY_HINT = `${key('Space', true)} up <i></i> ${key('C')} down <i></i> ${key('Shift', true)} boost <i></i> ${key('F')} land`;
+const WALK_HINT = `${key('W')}${key('A')}${key('S')}${key('D')} 이동 <i></i> ${key('Shift', true)} 달리기 <i></i> ${key('Space', true)} 점프 <i></i> ${key('F')} 비행 <i></i> ${key('M')} 소리`;
+const FLY_HINT = `${key('Space', true)} 상승 <i></i> ${key('C')} 하강 <i></i> ${key('Shift', true)} 가속 <i></i> ${key('F')} 착지`;
 
 export type Screen = 'title' | 'blend' | 'play' | 'pause';
 export type ModeName = 'Walking' | 'Flying' | 'Swimming';
+
+/** Korean display labels for the internal mode names (comparisons and CSS hooks keep the English values). */
+const MODE_LABEL: Record<ModeName, string> = { Walking: '걷기', Flying: '비행', Swimming: '수영' };
 
 export class Hud {
   readonly root: HTMLDivElement;
@@ -63,17 +66,17 @@ export class Hud {
     root.className = 'tp-root';
     root.innerHTML = `
       <div class="tp-scrim"></div>
-      <div class="tp-title" role="dialog" aria-label="Tiny Planet">
-        <div class="tp-eyebrow"><span class="tp-ico">${ICON.planet}</span>A pocket-sized world</div>
-        <h1>Tiny Planet</h1>
-        <p class="tp-sub">Wander the beaches, climb the windmill hill, and fly up to watch the sunset sweep around the world.</p>
-        <button class="tp-cta" type="button"><span class="tp-pulse"></span>Click to play</button>
+      <div class="tp-title" role="dialog" aria-label="타이니 플래닛">
+        <div class="tp-eyebrow"><span class="tp-ico">${ICON.planet}</span>주머니 속 작은 세상</div>
+        <h1>타이니 플래닛</h1>
+        <p class="tp-sub">해변을 거닐고, 풍차 언덕에 오르고, 하늘로 날아올라 세상을 감싸며 도는 석양을 바라보세요.</p>
+        <button class="tp-cta" type="button"><span class="tp-pulse"></span>클릭해서 시작</button>
         ${LEGEND}
       </div>
-      <div class="tp-pause" role="dialog" aria-label="Paused">
+      <div class="tp-pause" role="dialog" aria-label="일시정지">
         <div class="tp-card">
-          <div class="tp-pause-h">Paused</div>
-          <div class="tp-pause-sub">Click anywhere to keep exploring</div>
+          <div class="tp-pause-h">일시정지</div>
+          <div class="tp-pause-sub">아무 곳이나 클릭하면 탐험을 계속합니다</div>
           ${LEGEND}
           <div class="tp-note"></div>
         </div>
@@ -136,7 +139,7 @@ export class Hud {
     if (m === this.mode) return;
     const prev = this.mode;
     this.mode = m;
-    this.chipText.textContent = m;
+    this.chipText.textContent = MODE_LABEL[m];
     this.chipIcon.innerHTML = m === 'Flying' ? ICON.fly : m === 'Swimming' ? ICON.swim : ICON.walk;
     this.chip.dataset.mode = m;
     this.chip.classList.remove('tp-bump');
@@ -167,7 +170,7 @@ export class Hud {
   }
 
   mutedToast(muted: boolean) {
-    this.toast(`<span class="tp-ico">${muted ? ICON.mute : ICON.sound}</span>${muted ? 'Sound off' : 'Sound on'}`);
+    this.toast(`<span class="tp-ico">${muted ? ICON.mute : ICON.sound}</span>${muted ? '소리 끔' : '소리 켬'}`);
   }
 
   pauseMessage(text: string) {
@@ -187,7 +190,7 @@ export class Hud {
     const x = 20 - 13 * Math.cos(phi);
     const y = 22 - 13 * Math.sin(phi);
     const label =
-      h > 0.55 ? 'Midday' : h > 0.18 ? (rising ? 'Morning' : 'Afternoon') : h > -0.04 ? (rising ? 'Sunrise' : 'Sunset') : h > -0.2 ? (rising ? 'Dawn' : 'Dusk') : 'Night';
+      h > 0.55 ? '한낮' : h > 0.18 ? (rising ? '아침' : '오후') : h > -0.04 ? (rising ? '일출' : '일몰') : h > -0.2 ? (rising ? '새벽' : '황혼') : '밤';
     const key = `${x.toFixed(1)},${y.toFixed(1)},${night}`;
     if (key !== this.lastSun) {
       this.lastSun = key;
