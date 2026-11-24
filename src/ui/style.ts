@@ -59,11 +59,10 @@ export const STYLE = /* css */ `
   text-shadow: 0 1px 12px rgba(0,0,0,0.35);
 }
 .tp-title h1 {
-  margin: 0.12em 0 0; padding: 0.04em 0.5em 0.14em 0; font-size: clamp(52px, 6.2vw, 112px); line-height: 0.95; font-weight: 750;
+  margin: 0.12em 0 0; padding: 0.04em 0 0.14em; font-size: clamp(52px, 5vw, 84px); line-height: 0.95; font-weight: 750;
   letter-spacing: -0.035em; white-space: nowrap;
-  /* Korean title is wider than the panel: the gradient is clipped to the element box,
-     so size the box to the text or the overflowing glyphs render transparent. */
-  width: max-content; max-width: 100%;
+  /* Korean title is wider than the Latin original: background-clip:text clips the
+     gradient to the element box, so the font must always fit the 34em panel. */
   background: linear-gradient(176deg, #fffaf0 0%, #ffe9c6 46%, #ffc58f 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   filter: drop-shadow(0 4px 22px rgba(10, 8, 30, 0.45));
