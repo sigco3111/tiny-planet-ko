@@ -98,13 +98,13 @@ export default function createPlayer(ctx: Ctx): PlayerSystem {
     onLockError() {
       if (screen === 'pause') {
         // Chrome refuses a re-lock for ~1 s after Esc.
-        hud.pauseMessage('One moment, then click again');
+        hud.pauseMessage('잠시 후 다시 클릭하세요');
         return;
       }
       // Lock not available at all: play with drag-to-look instead.
       lockRefused = true;
       input.dragLook = true;
-      hud.toast('Drag with the mouse to look around', 3.5);
+      hud.toast('마우스를 드래그하면 주위를 둘러볼 수 있습니다', 3.5);
     },
   });
   // Silence the soundscape while the tab is hidden (the frame loop stops, so it would just drone on).
@@ -122,7 +122,7 @@ export default function createPlayer(ctx: Ctx): PlayerSystem {
     input.enabled = s === 'play' || s === 'blend';
     if (s !== 'play' && s !== 'blend') input.release();
     hud.setScreen(s);
-    if (s === 'pause') hud.pauseMessage(muted ? 'Sound is off  ·  press M to turn it on' : '');
+    if (s === 'pause') hud.pauseMessage(muted ? '소리가 꺼져 있습니다  ·  M을 누르면 켜집니다' : '');
   }
 
   function startAudio() {
